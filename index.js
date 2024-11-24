@@ -12,22 +12,8 @@ const getComputerChoice = () => {
   }
 };
 
-const getHumanChoice = () => {
-  const human = prompt(`
-    Enter the valid number
-    1: rock , 2: paper , 3: scissors`);
-  if (human === "1") {
-    return "rock";
-  } else if (human === "2") {
-    return "paper";
-  } else {
-    return "scissors";
-  }
-};
-
-const playRound = () => {
+const playRound = (human) => {
   const computer = getComputerChoice();
-  const human = getHumanChoice();
   if (computer === "rock") {
     if (human === "rock") {
       console.log(`Tie! Human: ${human} , Computer: ${computer}`);
@@ -79,12 +65,26 @@ const playRound = () => {
   }
 };
 
-const playGame = () => {
-  playRound();
-  playRound();
-  playRound();
-  playRound();
-  playRound();
+const buttons = document.querySelectorAll("button");
+
+const handleGame = (e) => {
+  const humanChoice = e.target.id;
+  playRound(humanChoice);
+  const result = document.querySelector(".result");
+  if (humanScore === 5 || computerScore === 5) {
+    if (humanScore === 5) {
+      result.textContent = "You win.";
+    } else {
+      result.textContent = "computer wins..";
+    }
+    buttons.forEach((button) => {
+      button.removeEventListener("click", handleGame);
+    });
+  } else {
+    result.textContent = `Human : ${humanScore} , Computer : ${computerScore}`;
+  }
 };
 
-playGame();
+buttons.forEach((button) => {
+  button.addEventListener("click", handleGame);
+});
